@@ -1,0 +1,100 @@
+{include file="public/meta" /}
+<article class="page-container">
+	<form method="post" class="form form-horizontal" id="form-admin-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>菜单名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="adminName" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>链接地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" autocomplete="off" placeholder="控制器/方法名称(index/index)" name="url">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">菜单图标：</label>
+			<div class="formControls col-xs-6 col-sm-8">
+				<input type="password" class="input-text" autocomplete="off" placeholder="例如:Hui-iconfont-root" name="icon">
+			</div>
+			<div class="formControls col-xs-2 col-sm-2">
+				<a href="http://www.h-ui.net/Hui-3.7-Hui-iconfont.shtml" title="查看样本" style="color: #00a2d4;text-decoration: none;">查看样本</a>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所属层级：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+            <span class="select-box">
+	            <select name="pid" class="select">
+                    {volist name="nav" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                    {/volist}
+                 </select>
+	        </span>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+{include file="public/footer" /}
+</body>
+</html>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript">
+$(function(){
+	//表单插件验证
+	$("#form-admin-add").validate({
+		rules:{
+			name:{
+				required:true,
+				minlength:2,
+				maxlength:6
+			},
+			url:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+        //表单失去焦点验证
+        onfocusout: function(element){
+            $(element).valid();
+        },
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "{:url('adminnav/add')}" ,
+				success: function(data){
+				    console.log(data);
+					if (data.code==0){
+                        layer.msg('添加成功!',{icon:1,time:2000},function () {
+							window.location.href=data.data.jump_url;
+                        });
+					}else if(data.code==1){
+                        layer.msg('添加失败!',{icon:5,time:2000},function () {
+                            window.location.href=data.data.jump_url;
+                        });
+					}
+				},
+				error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('未知错误!',{icon:1,time:1000});
+				}
+			});
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.$('.btn-refresh').click();
+			parent.layer.close(index);
+		}
+	});
+});
+</script> 
+
+
+

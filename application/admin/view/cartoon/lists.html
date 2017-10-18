@@ -1,0 +1,80 @@
+<!--header-->
+{include file="public/meta" title="娱乐资讯"/}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 资讯管理 <span class="c-gray en">&gt;</span> 资讯列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <form action="{:url('cartoon/lists')}" method="get">
+           <span class="select-box inline">
+                <select name="catid" class="select">
+                  <option value="0">全部分类</option>
+                  
+                </select>
+            </span> 日期范围：
+            <input type="text" name="title" id="newsname" value="" placeholder=" 资讯名称" style="width:250px" class="input-text">
+            <button name="" id="btn" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜资讯</button>
+        </form>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="" value=""></th>
+                <th width="80">网页主键</th>
+                <th>标题</th>
+                <th width="80">作者</th>
+                <th width="80">标签</th>
+                <th width="120">更新时间</th>
+                <th width="40">描述</th>
+                <th width="60">状态</th>
+                <th width="60">网页链接</th>
+                <th width="60">封面图片</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="data" id="vo"}
+            <tr class="text-c">
+                <td><input type="checkbox" value="" name=""></td>
+                <td>{$vo.hkey}</td>
+                <td align="center" width="100"><a style="cursor:pointer;" href="#" class="text-primary"  title="查看">{$vo.title}</a></td>
+                <td>{$vo.author}</td>
+                <td>{$vo.tag}</td>
+                <td>{$vo.create_time}</td>
+                <td>漫画</td>
+                <td class="td-status">{$vo.status}</td>
+                <td class="td-status">
+                	<a href="{$vo.url}" title="漫画地址">{$vo.url}</a>
+                </td>
+                <td class="td-status">
+                	<img src="{$vo.image_url}" width="40" height="40" />
+                </td>
+                <td class="f-14 td-manage">
+                    <a style="text-decoration:none" class="ml-5" onClick="article_edit('资讯编辑','article-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a style="text-decoration:none" class="ml-5" onClick="del(this)" href="javascript:;" title="删除" del_url="{:url('news/delete',['id'=>$vo.hkey])}"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+        <div class="page-container">
+        	{$page}
+        </div>
+    </div>
+</div>
+<!--分页样式-->
+<style type="text/css" media="screen">
+.pagination li{
+	width: 50px;
+	height: 20px;
+	/* border: 1px solid red; */
+	float: left;
+}
+</style>
+<!--footer-->
+{include file="public/footer" /}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/laypage/1.2/laypage.js"></script>
+{load href="__STATIC__/admin/static/custom/common.js"}

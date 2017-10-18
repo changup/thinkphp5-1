@@ -1,0 +1,87 @@
+{include file="public/meta" /}
+
+<link rel="stylesheet" href="__STATIC__/admin/static/custom/normalize.css">
+<link rel="stylesheet" href="__STATIC__/admin/static/custom/style.css">
+
+<!--错误提示样式-->
+<style type="text/css">
+	.error{
+		color: red;
+	}
+</style>
+<div class="login">
+	<h1>后台登录</h1>
+	<form method="post" class="form form-horizontal" id="login-form">
+		<p><input type="text" id="username" name="username" placeholder="用户名" /><label for="username"></label></p>
+		<p><input type="password" id="password" name="password" placeholder="密码"/><label for="password"></label></p>
+		<input type="text" name="code" id="code" placeholder="验证码">
+		<!--<div><img id="captcha" style="vertical-align: middle;cursor: pointer;" onclick="document.getElementById('captcha').src='/captcha?id='+Math.random()" src="{:captcha_src()}" alt="captcha" /></div>-->
+		<img id="captcha" style="vertical-align: middle;cursor: pointer;" onclick="document.getElementById('captcha').src='/captcha?id='+Math.random()" src="/captcha" alt="">
+		<button style="height: 40px;line-height: 40px;font-size: 16px;letter-spacing: 4px" type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+	</form>
+</div>
+{include file="public/footer" /}
+</body>
+</html>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+	$(function () {
+		$("#login-form").validate({
+			//验证的错误信息显示位置
+            errorPlacement: function(error, element) {
+                $( element )
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .append( error );
+            },
+            errorElement: "span",
+            rules: {
+                username: {
+                    required: true,
+					maxlength:6,
+					minlength:4,
+                },
+                password: {
+                    required: true
+                },
+				code:{
+                    required: true
+				}
+            },
+        	onkeyup:false,
+			//表单失去焦点验证
+            onfocusout: function(element){
+                $(element).valid();
+            },
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+			//异步提交表单
+            $(form).ajaxSubmit({
+                type: 'post',
+                url: "{:url('login/check')}" ,
+                success: function(data){
+                    console.log(data);
+					if (data.code==0){
+                        layer.msg('登录成功!',{icon:1,time:1000},function () {
+                            window.location.href = data.data.jump_url;
+                        });
+					}else if (data.code==3){
+                        layer.msg('验证码错误!',{icon:5,time:1000},function () {
+                            self.href = data.data.jump_url;
+                        });
+					}
+                },
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+                    layer.msg('未知错误!',{icon:1,time:1000});
+                }
+            });
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.$('.btn-refresh').click();
+            parent.layer.close(index);
+        }
+        });
+    })
+</script>

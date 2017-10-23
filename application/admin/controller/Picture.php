@@ -3,17 +3,18 @@
 
 	class Picture extends Base{
 		public function lists(){
-			$picList=model('Picture')->select();
+			$picList=model('Picture')->paginate(2);
 			//将url地址转化为数组
 			foreach ($picList as $k => $v) {
 				$picList[$k]['url']=explode(';',$v['url']);
 			}
-			// halt($picList);
+			$page=$picList->render();
 			return $this->fetch('',[
 				'types'		=>	config('pictype.types'),
 				'typeid'	=>	empty($data['type'])?'':$data['type'],
-				'title'         =>  empty($data['title'])?'':$data['title'],
+				'title'     =>  empty($data['title'])?'':$data['title'],
 				'picList'	=>	$picList,
+                'page'      =>  $page
 			]);
 		}
 		public function add(){

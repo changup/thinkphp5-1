@@ -236,7 +236,8 @@ return [
     'paginate'               => [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
-        'list_rows' => 4,
+        'list_rows' =>  5,
+        'newstyle'  =>  true
     ],
 
     //验证码配置

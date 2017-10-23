@@ -21,13 +21,13 @@
             <tr class="text-c">
                 <th width="25"><input type="checkbox" name="" value=""></th>
                 <th width="80">网页主键</th>
-                <th>标题</th>
-                <th width="80">作者</th>
-                <th width="80">标签</th>
-                <th width="120">更新时间</th>
-                <th width="40">描述</th>
+                <th width="40">标题</th>
+                <th width="50">作者</th>
+                <th width="50">标签</th>
+                <th width="80">更新时间</th>
+                <th width="120">描述</th>
                 <th width="60">状态</th>
-                <th width="60">网页链接</th>
+                <th width="120">网页链接</th>
                 <th width="60">封面图片</th>
                 <th width="120">操作</th>
             </tr>
@@ -37,12 +37,12 @@
             <tr class="text-c">
                 <td><input type="checkbox" value="" name=""></td>
                 <td>{$vo.hkey}</td>
-                <td align="center" width="100"><a style="cursor:pointer;" href="#" class="text-primary"  title="查看">{$vo.title}</a></td>
-                <td>{$vo.author}</td>
-                <td>{$vo.tag}</td>
-                <td>{$vo.create_time}</td>
-                <td>漫画</td>
-                <td class="td-status">{$vo.status}</td>
+                <td align="center" width="100"><a style="cursor:pointer;" href="#" class="text-primary"  title="查看">{$vo.title|mb_substr=###,3,mb_strlen($vo.title,'utf-8'),'utf-8'}</a></td>
+                <td>{$vo.author|mb_substr=###,3,mb_strlen($vo.author,'utf-8'),'utf-8'}</td>
+                <td>{$vo.tag|mb_substr=###,3,mb_strlen($vo.tag,'utf-8'),'utf-8'}</td>
+                <td>{$vo.create_time|mb_substr=###,3,mb_strlen($vo.create_time,'utf-8'),'utf-8'}</td>
+                <td>{$vo.content|mb_substr=###,0,8,'utf-8'}....</td>
+                <td class="td-status">{$vo.status|mb_substr=###,3,mb_strlen($vo.status,'utf-8'),'utf-8'}</td>
                 <td class="td-status">
                 	<a href="{$vo.url}" title="漫画地址">{$vo.url}</a>
                 </td>
@@ -63,13 +63,12 @@
     </div>
 </div>
 <!--分页样式-->
-<style type="text/css" media="screen">
-.pagination li{
-	width: 50px;
-	height: 20px;
-	/* border: 1px solid red; */
-	float: left;
-}
+<style type="text/css">
+    /*分页样式*/
+    .pagination{text-align:right;}
+    .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 1.5px 8px;display: inline-block;}
+    .pagination .active{background-color: #46A3FF;color: #fff;}
+    .pagination .disabled{color:#aaa;}
 </style>
 <!--footer-->
 {include file="public/footer" /}

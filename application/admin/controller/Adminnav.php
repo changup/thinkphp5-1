@@ -7,15 +7,44 @@
  */
 namespace app\admin\controller;
 
+use think\Db;
 use think\Exception;
+use app\common\lib\Treetool;
 
 class Adminnav extends Base{
+
+    //查询后台首页所有菜单
     public function lists(){
-        return $this->fetch();
+//        $data=model('AdminNav')->findAllnav();
+        $data=model('AdminNav')->select();
+        $allNav=[];
+        //模型查询结果是对象数组,必须用循环来遍历
+        foreach ($data as $res){
+            $allNav[]=$res->getData();
+        }
+        //无限极分类
+
+
+        //分页页码
+//        $page=$data->render();
+
+        return $this->fetch('',[
+            'data'      =>      Treetool::tree($data),
+//            'page'      =>      $page
+        ]);
     }
 
     //添加后台首页菜单
     public function add(){
+        //查询后台所有一级菜单
+        $data=model('AdminNav')->findTopnav();  //返回对象
+//        $topNav=Db::name('Admin_nav')->where('pid=0')->select();
+
+        $topNav=[];
+        //模型查询结果是对象数组,必须用循环来遍历
+        foreach ($data as $res){
+            $topNav[]=$res->getData();
+        }
         if ($this->request->isPost()){
             $data=input('post.');
             try{
@@ -31,7 +60,8 @@ class Adminnav extends Base{
             }
         }else{
             return $this->fetch('',[
-                'nav'   =>      config('adminnav.level')
+                'nav'       =>      config('adminnav.level'),
+                'topnav'    =>      $topNav
             ]);
         }
     }

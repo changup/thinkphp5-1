@@ -14,10 +14,23 @@
 	    public $size='';    //每页显示的数据条数
         public $from=0;     //查询条件的起始值
         public $request='';
+        private $adminNav='';
+        private $secondnav=[];
 		//初始化方法
 		public function _initialize(){
             $this->request=Request::instance();
 			$isLogin=$this->isLogin();
+
+			//加载后台主页左侧一级菜单
+            $this->adminNav=model('AdminNav')->order('pid asc,id asc')->select();
+            //加载后台主页左侧二级菜单
+            foreach ($this->adminNav as $k=>$v){
+                $this->secondnav[]=model('AdminNav')
+                    ->where('pid',$v['id'])
+                    ->find();
+            }
+//            halt($this->secondnav);
+            $this->assign('adminnav',$this->adminNav);
 			if (!$isLogin) {
 				return $this->redirect('login/login');
 			}
